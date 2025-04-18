@@ -25,3 +25,6 @@ A arquitetura inicial será baseada em um CLI construído com Node.js (NestJS) q
 - A integração com IA local exige estrutura flexível de prompts
 - Permite evolução futura para API, integração com IDEs, pre-commit hooks
 
+## Comandos
+### Build
+ - npm run build && chmod +x dist/main.js && npm install -g . 

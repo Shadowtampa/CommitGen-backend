@@ -1,10 +1,25 @@
 import * as path from 'path';
+import clipboard from 'clipboardy';
 
+/**
+ * Interface que define o contrato para todas as estratégias de análise
+ * Cada estratégia deve implementar o método analyze que recebe uma lista de arquivos
+ * alterados e retorna uma string formatada com a análise
+ */
 export interface AnalysisStrategy {
-    analyze(files: Array<{ status: string; file: string }>): string;
+    analyze(files: Array<{ status: string; file: string }>, options?: Record<string, any>): string;
 }
 
+/**
+ * Estratégia que lista todos os arquivos alterados de forma numerada
+ * Mostra o caminho relativo do arquivo e seu status (modificado, adicionado, etc)
+ */
 export class FileListStrategy implements AnalysisStrategy {
+    /**
+     * Analisa os arquivos e gera uma lista numerada com o caminho e status de cada um
+     * @param files - Array de objetos contendo status e caminho dos arquivos
+     * @returns String formatada com a lista de arquivos
+     */
     analyze(files: Array<{ status: string; file: string }>): string {
         let message = 'Arquivos alterados:\n';
         files.forEach(({ status, file }, index) => {
@@ -17,6 +32,11 @@ export class FileListStrategy implements AnalysisStrategy {
         return message;
     }
 
+    /**
+     * Converte o código de status do git para uma descrição em português
+     * @param status - Código de status do git (M, A, D, R, ??)
+     * @returns Descrição do status em português
+     */
     private getStatusDescription(status: string): string {
         const descriptions = {
             'M': 'modificado',
@@ -29,7 +49,16 @@ export class FileListStrategy implements AnalysisStrategy {
     }
 }
 
+/**
+ * Estratégia que agrupa os arquivos por diretório
+ * Mostra um resumo de quantos arquivos foram alterados em cada diretório
+ */
 export class DirectorySummaryStrategy implements AnalysisStrategy {
+    /**
+     * Analisa os arquivos e gera um resumo agrupado por diretório
+     * @param files - Array de objetos contendo status e caminho dos arquivos
+     * @returns String formatada com o resumo por diretório
+     */
     analyze(files: Array<{ status: string; file: string }>): string {
         const filesByDir = this.groupFilesByDirectory(files);
         let message = '\nResumo por diretório:\n';
@@ -45,6 +74,11 @@ export class DirectorySummaryStrategy implements AnalysisStrategy {
         return message;
     }
 
+    /**
+     * Agrupa os arquivos por diretório, ignorando o status
+     * @param files - Array de objetos contendo status e caminho dos arquivos
+     * @returns Objeto com diretórios como chaves e arrays de nomes de arquivos como valores
+     */
     private groupFilesByDirectory(files: Array<{ status: string; file: string }>): Record<string, string[]> {
         return files.reduce((acc, { file }) => {
             const dir = path.dirname(file) || '.';
@@ -57,7 +91,16 @@ export class DirectorySummaryStrategy implements AnalysisStrategy {
     }
 }
 
+/**
+ * Estratégia que conta e resume os tipos de alteração
+ * Mostra quantos arquivos foram modificados, adicionados, deletados, etc
+ */
 export class TypeSummaryStrategy implements AnalysisStrategy {
+    /**
+     * Analisa os arquivos e gera um resumo dos tipos de alteração
+     * @param files - Array de objetos contendo status e caminho dos arquivos
+     * @returns String formatada com o resumo dos tipos de alteração
+     */
     analyze(files: Array<{ status: string; file: string }>): string {
         const statusTypes = this.countStatusTypes(files);
         let message = '\nTipos de alteração:\n';
@@ -70,6 +113,11 @@ export class TypeSummaryStrategy implements AnalysisStrategy {
         return message;
     }
 
+    /**
+     * Conta quantos arquivos existem para cada tipo de status
+     * @param files - Array de objetos contendo status e caminho dos arquivos
+     * @returns Objeto com status como chaves e contagem como valores
+     */
     private countStatusTypes(files: Array<{ status: string; file: string }>): Record<string, number> {
         return files.reduce((acc, { status }) => {
             acc[status] = (acc[status] || 0) + 1;
@@ -77,6 +125,11 @@ export class TypeSummaryStrategy implements AnalysisStrategy {
         }, {} as Record<string, number>);
     }
 
+    /**
+     * Converte o código de status do git para uma descrição em português
+     * @param status - Código de status do git (M, A, D, R, ??)
+     * @returns Descrição do status em português
+     */
     private getStatusDescription(status: string): string {
         const descriptions = {
             'M': 'modificado',
@@ -88,3 +141,24 @@ export class TypeSummaryStrategy implements AnalysisStrategy {
         return descriptions[status] || status;
     }
 } 
+
+/**
+ * Estratégia que gera uma mensagem de commit usando IA e o padrão estabelecido via JSON
+
+ */
+export class CommitMessageStrategy implements AnalysisStrategy {
+    /**
+     * Analisa os arquivos e gera uma mensagem de commit
+     * @param files - Array de objetos contendo status e caminho dos arquivos
+     * @returns String formatada com a mensagem de commit
+     */
+    analyze(files: Array<{ status: string; file: string }>, options: Record<string, any>): string {
+      // Inicia a mensagem com o tipo de commit e número total de arquivos
+      const commitMessage = `\n\n${options.tipo || 'feat'}: alterações em ${files.length} arquivo(s)\n\n`;
+
+      clipboard.writeSync(commitMessage);
+      clipboard.readSync();
+
+      return commitMessage;
+    }
+}
