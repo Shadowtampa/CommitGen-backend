@@ -1,10 +1,13 @@
 {
-  "name": "commit-gen-backend",
+  "name": "commit-gen",
   "version": "0.0.1",
-  "description": "",
+  "description": "CLI para gerar mensagens de commit baseadas em git diff",
   "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "private": false,
+  "license": "MIT",
+  "bin": {
+    "commit-gen": "./dist/main.js"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -17,12 +20,14 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "cli": "ts-node -r tsconfig-paths/register src/main.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "nest-commander": "^3.17.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
