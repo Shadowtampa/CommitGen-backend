@@ -19,9 +19,9 @@ export class AiMessageGeneratorController {
      * @param filesChanges - Array de objetos contendo as mudanças em cada arquivo
      * @returns Promise<string> - Mensagem de commit gerada
      */
-    async generateCommitMessage(filesChanges: FileChanges[]): Promise<string> {
+    async generateCommitMessage(filesChanges: FileChanges[], tipo:string ): Promise<string> {
      
-        let message = 'feat: ';
+        let message = `(${tipo}): `;
         
         // Analisa as mudanças para gerar uma mensagem descritiva
         filesChanges.forEach(({ file, changes }) => {

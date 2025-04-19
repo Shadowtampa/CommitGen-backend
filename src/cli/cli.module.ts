@@ -49,6 +49,7 @@ export class CommitGenCommand extends CommandRunner {
   @Option({
     flags: '-t, --tipo [string]',
     description: 'Tipo de commit (feat, fix, docs, etc)',
+    defaultValue: 'feat',
   })
   parseTipo(val: string): string {
     return val;
@@ -115,7 +116,7 @@ export class CommitGenCommand extends CommandRunner {
 
       // Gera a mensagem de commit usando IA
       const commitMessage =
-        await this.aiGenerator.generateCommitMessage(changedFilesContent);
+        await this.aiGenerator.generateCommitMessage(changedFilesContent, options.tipo);
       console.log(commitMessage);
     } catch (error) {
       console.error('Erro:', error.message);
