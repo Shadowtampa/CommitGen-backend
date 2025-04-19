@@ -146,19 +146,3 @@ export class TypeSummaryStrategy implements AnalysisStrategy {
  * Estratégia que gera uma mensagem de commit usando IA e o padrão estabelecido via JSON
 
  */
-export class CommitMessageStrategy implements AnalysisStrategy {
-    /**
-     * Analisa os arquivos e gera uma mensagem de commit
-     * @param files - Array de objetos contendo status e caminho dos arquivos
-     * @returns String formatada com a mensagem de commit
-     */
-    analyze(files: Array<{ status: string; file: string }>, options: Record<string, any>): string {
-      // Inicia a mensagem com o tipo de commit e número total de arquivos
-      const commitMessage = `\n\n${options.tipo || 'feat'}: alterações em ${files.length} arquivo(s)\n\n`;
-
-      clipboard.writeSync(commitMessage);
-      clipboard.readSync();
-
-      return commitMessage;
-    }
-}

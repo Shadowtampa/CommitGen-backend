@@ -27,7 +27,6 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
-    "clipboardy": "^4.0.0",
     "nest-commander": "^3.17.0",
     "ollama": "^0.5.15",
     "reflect-metadata": "^0.2.2",
