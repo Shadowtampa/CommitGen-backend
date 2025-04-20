@@ -38,9 +38,10 @@ export class AiMessageGeneratorController {
 
     const prompt = `According to the changes below, generate a commit message following these instructions:
 - Use the **Conventional Commits** pattern;
+-  ALWAYS generate the message in English-UK
 
 - Use this structure:   
-"<description>
+(${tipo}): <description>
 
 [optional body]
 
@@ -66,8 +67,9 @@ export class AiMessageGeneratorController {
 
 - ONLY generate the message. Do NOT explain it to me;
 
+
 ---
-                    Arquivos alterados:
+                    CHANGE LIST:
                     ${filesChanges
                       .map(
                         ({ file, changes }) => `
@@ -78,10 +80,13 @@ export class AiMessageGeneratorController {
                       .join('\n')}
                       
                       ---
-                      - generate the message in English-UK
+
+
+
+                      - MORE CONTEXT:
+                      -  ALWAYS generate the message in English-UK
                       - generate a list of the changes. 
                       - NEVER generate a single line message.
-
                       `;
 
     // Criar arquivo temporário
