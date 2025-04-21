@@ -82,7 +82,7 @@ export class CommitGenCommand extends CommandRunner {
 
       // Obtém o diff dos arquivos staged
       const diffOutput = execSync('git diff --staged', { encoding: 'utf8' });
-      const changedFilesContent = this.parseGitDiff(diffOutput);
+      // const changedFilesContent = this.parseGitDiff(diffOutput);
 
       // Se não houver arquivos alterados, retorna mensagem apropriada
       if (filesChanged.length === 0) {
@@ -116,7 +116,7 @@ export class CommitGenCommand extends CommandRunner {
 
       // Gera a mensagem de commit usando IA
       const commitMessage =
-        await this.aiGenerator.generateCommitMessage(changedFilesContent, options.tipo);
+        await this.aiGenerator.generateCommitMessage(diffOutput, options.tipo);
       console.log(commitMessage);
     } catch (error) {
       console.error('Erro:', error.message);

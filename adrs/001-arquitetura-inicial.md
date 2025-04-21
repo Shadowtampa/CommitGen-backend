@@ -20,6 +20,7 @@ A arquitetura inicial será baseada em um CLI construído com Node.js (NestJS) q
 - Usar chamadas à API externa (descartado por depender de internet)
 - Desenvolver interface gráfica (foge do escopo do MVP)
 - O modelo tem um problema chato em relação a geração de mensagens em outras línguas. Considero deixá-lo em inglês e usar outra API pra tradução. 
+- vamos trocar o gemma:latest pelo code-llama
 
 ## Consequências
 - O uso de NestJS em CLI demanda adaptação (mas traz padronização de DI, testes e organização)
